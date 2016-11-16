@@ -50,6 +50,8 @@ public interface ActProxyAuthenticated extends Remote, JIntHasServerSideActor, J
 	public PtBoolean oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
 			throws RemoteException, NotBoundException;
 
+	
+	public void showMessage() throws RemoteException, NotBoundException;
 	/**
 	 * Performs the oeLogut function with the current user.
 	 *

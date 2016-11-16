@@ -331,6 +331,8 @@ public interface IcrashSystem extends Remote {
 	 */
 	public PtBoolean oeLogin(DtLogin aDtLogin,DtPassword aDtPassword) throws RemoteException; 
 	
+	public void showMessage() throws RemoteException;
+	
 	/**
 	 * Processes a logout for the current authenticating actor.
 	 *

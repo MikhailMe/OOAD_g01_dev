@@ -78,6 +78,10 @@ public abstract class ActProxyAuthenticatedImpl extends UnicastRemoteObject impl
 		return this._serverSideActor.oeLogin(aDtLogin, aDtPassword);
 	}
 	
+	public void showMessage() throws RemoteException, NotBoundException {
+		this._serverSideActor.showMessage();
+	}
+	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated#oeLogout()
 	 */

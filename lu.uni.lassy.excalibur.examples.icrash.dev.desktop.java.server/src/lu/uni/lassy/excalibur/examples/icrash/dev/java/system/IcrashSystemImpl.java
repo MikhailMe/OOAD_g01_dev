@@ -47,6 +47,7 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.CtCr
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.CtHuman;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.CtState;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAlertID;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtComment;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCrisisID;
@@ -54,6 +55,7 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtGP
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPhoneNumber;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtAlertStatus;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisStatus;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisType;
@@ -585,6 +587,8 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			DtLogin aLogin = new DtLogin(new PtString(adminName));
 			DtPassword aPwd = new DtPassword(new PtString("7WXC1359"));
 			ctAdmin.init(aLogin, aPwd);
+			DtQuestion aQuestion = new DtQuestion(new PtString("bttnBottomAdminCoordinatorOptions"));
+			DtAnswer aAnswer = new DtAnswer(new PtString("murzik"));
 			/*
 			PostF 7 the association between ctAdministrator and actAdministrator is made of 
 			one couple made of the jointly specified instances.
@@ -1105,7 +1109,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 	 */
 	//actAuthenticated Actor
 	public PtBoolean oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
-			throws RemoteException {		
+			throws RemoteException {
 		try {
 			log.debug("The current requesting authenticating actor is " + currentRequestingAuthenticatedActor.getLogin().value.getValue());
 			//PreP1
@@ -1134,7 +1138,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 					if (authActorCheck != null && authActorCheck.getLogin().value.getValue().equals(currentRequestingAuthenticatedActor.getLogin().value.getValue())){
 						ctAuthenticatedInstance.vpIsLogged = new PtBoolean(true);
 						//PostF1
-						PtString aMessage = new PtString("You are logged ! Welcome ...");
+						PtString aMessage = new PtString("You are logged.Welocome ...");
 						currentRequestingAuthenticatedActor.ieMessage(aMessage);
 						return new PtBoolean(true);
 					}
@@ -1158,6 +1162,16 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 		}
 		return new PtBoolean(false);
 	}
+	
+	public void showMessage() throws RemoteException {		
+		try {
+			PtString aMessage = new PtString("Wrong identification information! Please try again ...");
+			currentRequestingAuthenticatedActor.ieMessage(aMessage);
+		}catch(Exception e){
+			log.error("Exception in showMessage..." + e);
+		}
+	}
+	
 	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogout()

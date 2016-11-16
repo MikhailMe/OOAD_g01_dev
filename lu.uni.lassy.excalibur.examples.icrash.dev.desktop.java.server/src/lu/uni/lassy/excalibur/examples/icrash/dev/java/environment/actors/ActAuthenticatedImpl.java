@@ -31,54 +31,66 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.RmiUtils;
 
 import org.apache.log4j.Logger;
 
-
 /**
- * The Class ActAuthenticatedImpl, which creates a server side actor of type authenticated.
- * It is an abstract class, so must be created by another actor, like the coordinator
+ * The Class ActAuthenticatedImpl, which creates a server side actor of type
+ * authenticated. It is an abstract class, so must be created by another actor,
+ * like the coordinator
  */
-public abstract class ActAuthenticatedImpl extends UnicastRemoteObject
-		implements ActAuthenticated {
+public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implements ActAuthenticated {
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 227L;
 
 	/** The login of the class type associated with this actor. */
 	private DtLogin login;
-	
+
 	/**
 	 * Instantiates a new server side actor of type authenticated.
 	 *
-	 * @param n The username that is associated with this authenticated actor. This helps tracking actors and their associated class type (Ct...)
-	 * @throws RemoteException Thrown if the server is offline
+	 * @param n
+	 *            The username that is associated with this authenticated actor.
+	 *            This helps tracking actors and their associated class type
+	 *            (Ct...)
+	 * @throws RemoteException
+	 *             Thrown if the server is offline
 	 */
 	public ActAuthenticatedImpl(DtLogin n) throws RemoteException {
 		super(RmiUtils.getInstance().getPort());
 		this.login = n;
-		
+
 	}
-	
-	/* (non-Javadoc)
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAuthenticated#getName()
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
+	 * ActAuthenticated#getName()
 	 */
 	public DtLogin getLogin() {
 		return login;
 	}
 
-	/* (non-Javadoc)
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAuthenticated#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
+	 * ActAuthenticated#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.
+	 * system.types.primary.DtLogin,
+	 * lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.
+	 * DtPassword)
 	 */
-	synchronized public PtBoolean oeLogin(DtLogin aDtLogin,
-			DtPassword aDtPassword) throws RemoteException, NotBoundException {
+	synchronized public PtBoolean oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
+			throws RemoteException, NotBoundException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
 
-		Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(),RmiUtils.getInstance().getPort());
+		Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(),
+				RmiUtils.getInstance().getPort());
 
-		//Gathering the remote object as it was published into the registry
-		IcrashSystem iCrashSys_Server = (IcrashSystem) registry
-				.lookup("iCrashServer");
+		// Gathering the remote object as it was published into the registry
+		IcrashSystem iCrashSys_Server = (IcrashSystem) registry.lookup("iCrashServer");
 
-		//set up ActAuthenticated instance that performs the request
+		// set up ActAuthenticated instance that performs the request
 		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
 
 		log.info("message ActAuthenticated.oeLogin sent to system");
@@ -86,25 +98,46 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject
 
 		if (res.getValue() == true)
 			log.info("operation oeLogin successfully executed by the system");
+		else log.error("xyesos");
 
 		return res;
 	}
-	
-	/* (non-Javadoc)
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAuthenticated#oeLogout()
+
+	synchronized public void showMessage() throws RemoteException, NotBoundException {
+		Logger log = Log4JUtils.getInstance().getLogger();
+
+		Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(),
+				RmiUtils.getInstance().getPort());
+
+		// Gathering the remote object as it was published into the registry
+		IcrashSystem iCrashSys_Server = (IcrashSystem) registry.lookup("iCrashServer");
+
+		// set up ActAuthenticated instance that performs the request
+		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
+
+		// log.info("message ActAuthenticated.oeLogin sent to system");
+		// PtBoolean res = iCrashSys_Server.oeLogin(aDtLogin, aDtPassword);
+
+		iCrashSys_Server.showMessage();
+	}
+
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
+	 * ActAuthenticated#oeLogout()
 	 */
-	synchronized public PtBoolean oeLogout() throws RemoteException,
-			NotBoundException {
+	synchronized public PtBoolean oeLogout() throws RemoteException, NotBoundException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
 
-		Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(),RmiUtils.getInstance().getPort());
+		Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(),
+				RmiUtils.getInstance().getPort());
 
-		//Gathering the remote object as it was published into the registry
-		IcrashSystem iCrashSys_Server = (IcrashSystem) registry
-				.lookup("iCrashServer");
+		// Gathering the remote object as it was published into the registry
+		IcrashSystem iCrashSys_Server = (IcrashSystem) registry.lookup("iCrashServer");
 
-		//set up ActAuthenticated instance that performs the request
+		// set up ActAuthenticated instance that performs the request
 		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
 
 		log.info("message ActAuthenticated.oeLogout sent to system");
@@ -115,30 +148,40 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject
 
 		return res;
 	}
-	
+
 	/** A list of listeners associated with this actor. */
 	protected List<ActProxyAuthenticated> listeners = new ArrayList<ActProxyAuthenticated>();
 
-	/* (non-Javadoc)
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAuthenticated#addListener(lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
+	 * ActAuthenticated#addListener(lu.uni.lassy.excalibur.examples.icrash.dev.
+	 * java.environment.actors.ActProxyAuthenticated)
 	 */
-	synchronized public void addListener(
-			ActProxyAuthenticated aActProxyAuthenticated)
+	synchronized public void addListener(ActProxyAuthenticated aActProxyAuthenticated)
 			throws RemoteException, NotBoundException {
 		listeners.add(aActProxyAuthenticated);
 	}
 
-	/* (non-Javadoc)
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAuthenticated#removeListener(lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
+	 * ActAuthenticated#removeListener(lu.uni.lassy.excalibur.examples.icrash.
+	 * dev.java.environment.actors.ActProxyAuthenticated)
 	 */
-	synchronized public void removeListener(
-			ActProxyAuthenticated aActProxyAuthenticated)
+	synchronized public void removeListener(ActProxyAuthenticated aActProxyAuthenticated)
 			throws RemoteException, NotBoundException {
 		listeners.remove(aActProxyAuthenticated);
 	}
 
-	/* (non-Javadoc)
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAuthenticated#ieMessage(lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
+	 * ActAuthenticated#ieMessage(lu.uni.lassy.excalibur.examples.icrash.dev.
+	 * java.types.stdlib.PtString)
 	 */
 	public PtBoolean ieMessage(PtString aMessage) {
 		Logger log = Log4JUtils.getInstance().getLogger();
@@ -156,5 +199,5 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject
 		}
 		return new PtBoolean(true);
 	}
-	
+
 }

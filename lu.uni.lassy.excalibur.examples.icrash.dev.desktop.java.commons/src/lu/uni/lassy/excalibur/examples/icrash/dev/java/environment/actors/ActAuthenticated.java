@@ -46,6 +46,9 @@ public interface ActAuthenticated extends java.rmi.Remote, Serializable, JIntIsA
 	 */
 	public PtBoolean oeLogin(DtLogin aDtLogin,DtPassword aDtPassword) throws RemoteException, NotBoundException;
 	
+	
+	public void showMessage() throws RemoteException, NotBoundException;
+	
 	/**
 	 * Allows a user to logoff to the system.
 	 *

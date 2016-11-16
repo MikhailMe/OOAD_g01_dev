@@ -65,6 +65,18 @@ public abstract class AbstractUserController implements HasListeners {
 			throw new ServerNotBoundException();
 		}
 	}
+	
+	public void showMessage() throws ServerOfflineException, ServerNotBoundException{
+		try {
+			this.getAuth().showMessage();
+		} catch (RemoteException e) {
+			Log4JUtils.getInstance().getLogger().error(e);
+			throw new ServerOfflineException();
+		} catch (NotBoundException e) {
+			Log4JUtils.getInstance().getLogger().error(e);
+			throw new ServerNotBoundException();
+		}
+	}
 	/**
 	 * The method that allows the user to logoff.
 	 *

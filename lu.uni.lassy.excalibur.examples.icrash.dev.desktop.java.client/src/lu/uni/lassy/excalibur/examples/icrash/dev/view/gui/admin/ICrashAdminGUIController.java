@@ -88,26 +88,43 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	@FXML
     public void bttnBottomLogon_OnClick(ActionEvent event){
     	entry();
-    }	
-
-	private void entry(){
-		try {
-		if (userController.oeLogin(txtfldAdminUserName.getText(),
-				psswrdfldAdminPassword.getText()).getValue()){
-			if (strAnswer.equals(pssFldAnswer.getText())){
-	   			brdpnAdditionalQuestion.setVisible(false);
-	   			pssFldAnswer.setText("");
-	   			logonShowPanes(true);
-	   		} else if (strAnswer.isEmpty()){
-	   			showWarningNoDataEntered();
-    		}else {
-	    		pssFldAnswer.setText("");
-	   		}
-		}	
-		}catch (ServerOfflineException | ServerNotBoundException e) {
-		showExceptionErrorMessage(e);
-		}
     }
+	
+	private void mistakeLP(){
+		pssFldAnswer.setText("");
+		brdpnAdditionalQuestion.setVisible(false);
+		logonShowPanes(false);
+		Log4JUtils.getInstance().getLogger().error("ENTER LOGIN & PASSWORD ERROR");
+	}
+	
+	private void mistakeQA(){
+		pssFldAnswer.setText("");
+		Log4JUtils.getInstance().getLogger().error("ENTER ANSWER ERROR");
+	}
+	
+	private void entry(){
+		boolean flagQA = pssFldAnswer.getText().equals(strAnswer);
+		if (flagQA){
+			try{
+				if (!userController.oeLogin(txtfldAdminUserName.getText(),
+	  					psswrdfldAdminPassword.getText()).getValue()){
+						mistakeLP();
+				} else{
+					if (!flagQA){
+						mistakeQA();
+					}else{
+						brdpnAdditionalQuestion.setVisible(false);
+						pssFldAnswer.setText("");
+						logonShowPanes(true);
+					}
+				}
+			}catch(ServerOfflineException | ServerNotBoundException e){
+				showExceptionErrorMessage(e);
+			}
+		}else{
+			mistakeLP();
+		}
+	}
 	
     /** The pane containing the logon controls. */
 	@FXML
@@ -343,8 +360,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 								showErrorMessage("Unable to delete coordinator", "An error occured when deleting the coordinator");
 							break;
 							
-							
-							/* HERE MY CODE*/	
+						// MY CODE
 						case Options:{
 								if (userController.oeOptions(txtChangeQuestion.getText(), txtChangeAnswer.getText()).getValue()){
 									if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
@@ -372,6 +388,18 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		AnchorPane.setBottomAnchor(grdpn, 0.0);
 		AnchorPane.setRightAnchor(grdpn, 0.0);
 		txtfldUserID.requestFocus();
+	}
+	
+	
+	private void optionsOnClick(TextField txtChangeQuestion, TextField txtChangeAnswer, GridPane grdpn){
+		if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
+			Log4JUtils.getInstance().getLogger().error("PLEASE ENTER DATA");
+		else if (!txtChangeQuestion.getText().isEmpty() && !txtChangeAnswer.getText().isEmpty()){
+			strQuestion = txtChangeQuestion.getText();
+			strAnswer = txtChangeAnswer.getText();
+			anchrpnCoordinatorDetails.getChildren().remove(grdpn);
+			Log4JUtils.getInstance().getLogger().error("SUCCESS CHANGE PASSWORD");
+		}
 	}
 	
 	/* (non-Javadoc)

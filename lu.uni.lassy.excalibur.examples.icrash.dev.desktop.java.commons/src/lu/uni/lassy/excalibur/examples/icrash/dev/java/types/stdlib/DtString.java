@@ -42,11 +42,11 @@ public class DtString implements Serializable {
 		 */
 		public PtBoolean eq(DtString s){
 			boolean res = s.value.getValue().equals(this.value.getValue());
-		
-			if(res)
+			/*if(res)
 				return new PtBoolean(true);
 			else
-				return new PtBoolean(false);
+				return new PtBoolean(false);*/
+			return new PtBoolean(res);
 		}
 		
 		/* (non-Javadoc)
