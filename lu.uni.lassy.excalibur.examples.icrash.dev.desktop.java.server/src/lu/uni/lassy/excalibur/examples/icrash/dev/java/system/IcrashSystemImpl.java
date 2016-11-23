@@ -81,6 +81,11 @@ import org.apache.log4j.Logger;
  */
 public class IcrashSystemImpl extends UnicastRemoteObject implements
 		IcrashSystem {
+	
+	
+	// HARDCODE QUESTION AND ANSWER :(
+	private DtQuestion questionForAdmin;
+	private DtAnswer answerForAdmin;
 
 	/** The Constant serialVersionUID. */
 	private static final long serialVersionUID = 1L;
@@ -587,8 +592,8 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			DtLogin aLogin = new DtLogin(new PtString(adminName));
 			DtPassword aPwd = new DtPassword(new PtString("7WXC1359"));
 			ctAdmin.init(aLogin, aPwd);
-			DtQuestion aQuestion = new DtQuestion(new PtString("bttnBottomAdminCoordinatorOptions"));
-			DtAnswer aAnswer = new DtAnswer(new PtString("murzik"));
+			questionForAdmin = new DtQuestion(new PtString("What name of you fucking cat sosk>??"));
+			answerForAdmin = new DtAnswer(new PtString("murzik"));
 			/*
 			PostF 7 the association between ctAdministrator and actAdministrator is made of 
 			one couple made of the jointly specified instances.
@@ -1108,7 +1113,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword)
 	 */
 	//actAuthenticated Actor
-	public PtBoolean oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
+	public PtString oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
 			throws RemoteException {
 		try {
 			log.debug("The current requesting authenticating actor is " + currentRequestingAuthenticatedActor.getLogin().value.getValue());
@@ -1119,8 +1124,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			 *this is done by checking if there exists an instance with
 			 *such credential in the ctAuthenticatedInstances data structure
 			 */
-			CtAuthenticated ctAuthenticatedInstance = cmpSystemCtAuthenticated
-					.get(aDtLogin.value.getValue());
+			CtAuthenticated ctAuthenticatedInstance = cmpSystemCtAuthenticated.get(aDtLogin.value.getValue());
 			if (ctAuthenticatedInstance != null){
 				//PreP2
 				if(ctAuthenticatedInstance.vpIsLogged.getValue())
@@ -1136,21 +1140,26 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 					ActAuthenticated authActorCheck = assCtAuthenticatedActAuthenticated.get(ctAuthenticatedInstance);
 					log.debug("The logging in actor is " + authActorCheck.getLogin().value.getValue());
 					if (authActorCheck != null && authActorCheck.getLogin().value.getValue().equals(currentRequestingAuthenticatedActor.getLogin().value.getValue())){
-						ctAuthenticatedInstance.vpIsLogged = new PtBoolean(true);
-						//PostF1
-						PtString aMessage = new PtString("You are logged.Welocome ...");
-						currentRequestingAuthenticatedActor.ieMessage(aMessage);
-						return new PtBoolean(true);
+						
+						if(!(ctAuthenticatedInstance instanceof CtAdministrator)){
+							ctAuthenticatedInstance.vpIsLogged = new PtBoolean(true);
+							//PostF1
+							PtString aMessage = new PtString("You succesfully logged in !!!");
+							currentRequestingAuthenticatedActor.ieMessage(aMessage);
+							return new PtString("coordinator");
+						}else{
+							PtString aMessage = new PtString("Okey.If you are admin, prove it !!!");
+							currentRequestingAuthenticatedActor.ieMessage(aMessage);
+							return questionForAdmin.value;
+						}
 					}
 				}
 			}
 			//PostF1
-			PtString aMessage = new PtString(
-					"Wrong identification information! Please try again ...");
+			PtString aMessage = new PtString("You aren't admin or please try again!");
 			currentRequestingAuthenticatedActor.ieMessage(aMessage);
 			Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(), RmiUtils.getInstance().getPort());
-			IcrashEnvironment env = (IcrashEnvironment) registry
-					.lookup("iCrashEnvironment");
+			IcrashEnvironment env = (IcrashEnvironment) registry.lookup("iCrashEnvironment");
 			//notify to all administrators that exist in the environment
 			for (String adminKey : env.getAdministrators().keySet()) {
 				ActAdministrator admin = env.getActAdministrator(adminKey);
@@ -1160,16 +1169,53 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 		} catch (Exception ex) {
 			log.error("Exception in oeLogin..." + ex);
 		}
-		return new PtBoolean(false);
+		return new PtString("false");
 	}
 	
-	public void showMessage() throws RemoteException {		
+	
+	
+	
+	/* (non-Javadoc)
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer)
+	 */
+	//actAuthenticated Actor
+	public PtBoolean oeEnterQuestion(DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException {
 		try {
-			PtString aMessage = new PtString("Wrong identification information! Please try again ...");
-			currentRequestingAuthenticatedActor.ieMessage(aMessage);
-		}catch(Exception e){
-			log.error("Exception in showMessage..." + e);
+			//PreP1
+			isSystemStarted();
+			/**
+			 * check whether the credentials corresponds to an existing user
+			 *this is done by checking if there exists an instance with
+			 *such credential in the ctAuthenticatedInstances data structure
+			 */
+		
+			//CtAuthenticated ctAuthenticatedInstance = cmpSystemCtAuthenticated.get(aDtLogin.value.getValue());
+			
+			//PostP1
+			if (aDtAnswer.value.getValue().equals(answerForAdmin.value.getValue())){
+				//ctAuthenticatedInstance.vpIsLogged = new PtBoolean(true);
+				PtString aMessage = new PtString("Your answer is right. Welcome! ...");
+				currentRequestingAuthenticatedActor.ieMessage(aMessage);
+				return new PtBoolean(true);
+			}
+			else{
+				Log4JUtils.getInstance().getLogger().error("You are wrong. Please try again ...");
+				//PostF1
+				PtString aMessage = new PtString("Wrong identification information! Please try again ...");
+				currentRequestingAuthenticatedActor.ieMessage(aMessage);
+				Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(), RmiUtils.getInstance().getPort());
+				IcrashEnvironment env = (IcrashEnvironment) registry.lookup("iCrashEnvironment");
+				//notify to all administrators that exist in the environment
+				for (String adminKey : env.getAdministrators().keySet()) {
+					ActAdministrator admin = env.getActAdministrator(adminKey);
+					aMessage = new PtString("Intrusion tentative !");
+					admin.ieMessage(aMessage);
+				}
+			}
+		} catch (Exception ex) {
+			log.error("Exception in oeEnterQuestion..." + ex);
 		}
+		return new PtBoolean(false);
 	}
 	
 	
@@ -1387,9 +1433,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			//PreP2
 			isAdminLoggedIn();
 			Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(), RmiUtils.getInstance().getPort());
-			IcrashEnvironment env = (IcrashEnvironment) registry
-					.lookup("iCrashEnvironment");
-			
+			IcrashEnvironment env = (IcrashEnvironment) registry.lookup("iCrashEnvironment");
 			cmpQuestionAnwer.put(txtQuestion, txtPassword);
 			//PostF1
 			ActAdministrator admin = (ActAdministrator) currentRequestingAuthenticatedActor;

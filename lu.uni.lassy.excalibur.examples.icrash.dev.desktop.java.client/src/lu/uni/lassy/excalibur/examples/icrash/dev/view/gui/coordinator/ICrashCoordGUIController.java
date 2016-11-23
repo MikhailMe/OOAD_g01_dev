@@ -451,7 +451,8 @@ public class ICrashCoordGUIController extends AbstractAuthGUIController {
 	public void logon() {
 		if(txtfldCoordLogonUserName.getText().length() > 0 && psswrdfldCoordLogonPassword.getText().length() > 0){
 			try {
-				if (userController.oeLogin(txtfldCoordLogonUserName.getText(), psswrdfldCoordLogonPassword.getText()).getValue()){
+				String isCoord = userController.oeLogin(txtfldCoordLogonUserName.getText(), psswrdfldCoordLogonPassword.getText()).getValue();
+				if (isCoord.equals("coordinator")){
 					if (userController.getUserType() == UserType.Coordinator){
 						logonShowPanes(true);
 					}

@@ -22,6 +22,7 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.design.JIntI
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 
@@ -43,15 +44,25 @@ public interface ActProxyAuthenticated extends Remote, JIntHasServerSideActor, J
 	 *
 	 * @param aDtLogin The username to logon with
 	 * @param aDtPassword The password to logon with
-	 * @return The success of the operation
+	 * @return The success of the operation is String = question
 	 * @throws RemoteException Thrown if the server is offline
 	 * @throws NotBoundException Thrown if the server has not been bound correctly in RMI settings
 	 */
-	public PtBoolean oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
+	public PtString oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
+			throws RemoteException, NotBoundException;
+	
+	/**
+	 * Performs the oeLogin function with the username and password provided.
+	 *
+	 * @param a question on which the user must answer
+	 * @param answer This is a answer for the additional question
+	 * @return The success of the method
+	 * @throws RemoteException Thrown if the server is offline
+	 * @throws NotBoundException Thrown if the server has not been bound correctly in RMI settings
+	 */
+	public PtBoolean oeEnterQuestion(DtQuestion aDtQuestion, DtAnswer aDtAnswer) 
 			throws RemoteException, NotBoundException;
 
-	
-	public void showMessage() throws RemoteException, NotBoundException;
 	/**
 	 * Performs the oeLogut function with the current user.
 	 *

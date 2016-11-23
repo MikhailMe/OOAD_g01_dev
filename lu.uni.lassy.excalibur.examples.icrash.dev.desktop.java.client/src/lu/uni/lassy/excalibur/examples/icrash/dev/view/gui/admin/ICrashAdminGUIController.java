@@ -47,7 +47,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
-import javafx.scene.text.Text;
 
 
 /*
@@ -63,66 +62,62 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	* When replacing, remember to reassign the correct methods to the button event methods and set the correct types for the tableviews
 	*/
 	
-	
+	// String which contains additional question
 	private String strQuestion;
 	
+	// String which contains answer for the additional question
 	private String strAnswer;
 	
-	private void setDefaultParams(){
-		strQuestion = "What's name of your cat ?";
-		strAnswer = "murzik";
-	}
-	
+	// Field, where we can see the additional question
 	@FXML
 	private TextField txtFldQuestion;
-	
+
+	// Field, where we can write answer for the additional question
 	@FXML
 	private PasswordField pssFldAnswer;
 
+	// Button which when clicked, check the response to an additional question
 	@FXML
 	private Button bttnLogon;
 	
+	// Pane, which contains txtFldQuestion, pssFldAnswer, bttnLogon
 	@FXML
 	private BorderPane brdpnAdditionalQuestion;
 	
+	// Action for the bttnLogon
 	@FXML
     public void bttnBottomLogon_OnClick(ActionEvent event){
     	entry();
     }
 	
-	private void mistakeLP(){
-		pssFldAnswer.setText("");
-		brdpnAdditionalQuestion.setVisible(false);
-		logonShowPanes(false);
-		Log4JUtils.getInstance().getLogger().error("ENTER LOGIN & PASSWORD ERROR");
-	}
-	
+	// If we mistaken in the answer for the additional question we can see error in the log
 	private void mistakeQA(){
 		pssFldAnswer.setText("");
 		Log4JUtils.getInstance().getLogger().error("ENTER ANSWER ERROR");
 	}
 	
+	// If we mistaken in the login or password we can see error in the log
+	private void mistakeLP(){
+		txtfldAdminUserName.setText("");
+		psswrdfldAdminPassword.setText("");
+		Log4JUtils.getInstance().getLogger().error("ENTER LOGIN OR PASSWORD ERROR");
+	}
+	
+	// This method is called when you click on the button bttnLogon
 	private void entry(){
-		boolean flagQA = pssFldAnswer.getText().equals(strAnswer);
-		if (flagQA){
-			try{
-				if (!userController.oeLogin(txtfldAdminUserName.getText(),
-	  					psswrdfldAdminPassword.getText()).getValue()){
-						mistakeLP();
-				} else{
-					if (!flagQA){
-						mistakeQA();
-					}else{
-						brdpnAdditionalQuestion.setVisible(false);
-						pssFldAnswer.setText("");
-						logonShowPanes(true);
-					}
-				}
-			}catch(ServerOfflineException | ServerNotBoundException e){
-				showExceptionErrorMessage(e);
+		try {
+			strQuestion = txtFldQuestion.getText();
+			strAnswer = pssFldAnswer.getText();
+			if (userController.oeEnterQuestion(strQuestion, strAnswer).getValue()){
+				brdpnAdditionalQuestion.setVisible(false);
+				pssFldAnswer.setText("");
+				logonShowPanes(true);
 			}
-		}else{
-			mistakeLP();
+			else {
+				mistakeQA();
+			}
+		} catch (ServerOfflineException | ServerNotBoundException e) {
+			e.printStackTrace();
 		}
 	}
 	
@@ -391,7 +386,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	}
 	
 	
-	private void optionsOnClick(TextField txtChangeQuestion, TextField txtChangeAnswer, GridPane grdpn){
+/*	private void optionsOnClick(TextField txtChangeQuestion, TextField txtChangeAnswer, GridPane grdpn){
 		if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
 			Log4JUtils.getInstance().getLogger().error("PLEASE ENTER DATA");
 		else if (!txtChangeQuestion.getText().isEmpty() && !txtChangeAnswer.getText().isEmpty()){
@@ -400,19 +395,27 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 			anchrpnCoordinatorDetails.getChildren().remove(grdpn);
 			Log4JUtils.getInstance().getLogger().error("SUCCESS CHANGE PASSWORD");
 		}
-	}
+	}*/
 	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController#logon()
 	 */
 	@Override
 	public void logon() {
-			if(txtfldAdminUserName.getText().length() > 0 &&
-					psswrdfldAdminPassword.getText().length() > 0){
-				pnAdminLogon.setVisible(false);
-				brdpnAdditionalQuestion.setVisible(true);
-				txtFldQuestion.setText(strQuestion);
-				txtFldQuestion.setEditable(false);
+			if(txtfldAdminUserName.getText().length() > 0 && psswrdfldAdminPassword.getText().length() > 0){
+				try{
+					String answer = userController.oeLogin(txtfldAdminUserName.getText(), psswrdfldAdminPassword.getText()).getValue();
+					if (answer.equals("false")){
+						mistakeLP();
+					} else {
+						pnAdminLogon.setVisible(false);
+						brdpnAdditionalQuestion.setVisible(true);
+						txtFldQuestion.setText(answer);		
+						txtFldQuestion.setEditable(false);
+					}
+				}catch (ServerOfflineException | ServerNotBoundException e){
+					e.getStackTrace();
+				}
 	    	}
 	    	else
 	    		showWarningNoDataEntered();
@@ -447,7 +450,6 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		systemstateController = new SystemStateController();
-		setDefaultParams();
 		brdpnAdditionalQuestion.setVisible(false);
 		logonShowPanes(false);
 		setUpTables();

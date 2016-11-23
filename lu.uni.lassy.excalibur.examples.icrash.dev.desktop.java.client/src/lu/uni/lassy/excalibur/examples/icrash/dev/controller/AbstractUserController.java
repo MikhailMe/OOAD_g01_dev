@@ -18,8 +18,10 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.controller.exceptions.ServerNo
 import lu.uni.lassy.excalibur.examples.icrash.dev.controller.exceptions.ServerOfflineException;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated.UserType;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
@@ -48,11 +50,11 @@ public abstract class AbstractUserController implements HasListeners {
 	 *
 	 * @param login The username to logon with
 	 * @param password The password to use
-	 * @return The success of the method
+	 * @return The success of the method is String = question
 	 * @throws ServerOfflineException Thrown if the server is currently offline
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
-	public PtBoolean oeLogin(String login, String password) throws ServerOfflineException, ServerNotBoundException{
+	public PtString oeLogin(String login, String password) throws ServerOfflineException, ServerNotBoundException{
 		DtLogin aDtLogin = new DtLogin(new PtString(login));
 		DtPassword aDtPassword = new DtPassword(new PtString(password));
 		try {
@@ -66,9 +68,20 @@ public abstract class AbstractUserController implements HasListeners {
 		}
 	}
 	
-	public void showMessage() throws ServerOfflineException, ServerNotBoundException{
+	/**
+	 * The method that allows the user to give answer for the additional question
+	 *
+	 * @param a question on which the user must answer
+	 * @param answer This is a answer for the additional question
+	 * @return The success of the method
+	 * @throws ServerOfflineException Thrown if the server is currently offline
+	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
+	 */
+	public PtBoolean oeEnterQuestion(String question, String answer) throws ServerOfflineException, ServerNotBoundException{
+		DtQuestion aDtQuestion = new DtQuestion(new PtString(question));
+		DtAnswer aDtAnswer = new DtAnswer(new PtString(answer));
 		try {
-			this.getAuth().showMessage();
+			return this.getAuth().oeEnterQuestion(aDtQuestion, aDtAnswer);
 		} catch (RemoteException e) {
 			Log4JUtils.getInstance().getLogger().error(e);
 			throw new ServerOfflineException();
@@ -77,6 +90,7 @@ public abstract class AbstractUserController implements HasListeners {
 			throw new ServerNotBoundException();
 		}
 	}
+	
 	/**
 	 * The method that allows the user to logoff.
 	 *
