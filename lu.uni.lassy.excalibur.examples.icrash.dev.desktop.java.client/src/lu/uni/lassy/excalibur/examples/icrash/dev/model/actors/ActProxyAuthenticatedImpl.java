@@ -21,7 +21,6 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.*;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
@@ -83,8 +82,8 @@ public abstract class ActProxyAuthenticatedImpl extends UnicastRemoteObject impl
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQustion, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer)
 	 */
-	public PtBoolean oeEnterQuestion(DtLogin aDtLogin, DtQuestion aDtQuestion,DtAnswer aDtAnswer)  throws RemoteException, NotBoundException{
-		return this._serverSideActor.oeEnterQuestion(aDtLogin, aDtQuestion, aDtAnswer);
+	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer)  throws RemoteException, NotBoundException{
+		return this._serverSideActor.oeEnterAnswer(aDtLogin, aDtAnswer);
 	}
 	
 	/* (non-Javadoc)

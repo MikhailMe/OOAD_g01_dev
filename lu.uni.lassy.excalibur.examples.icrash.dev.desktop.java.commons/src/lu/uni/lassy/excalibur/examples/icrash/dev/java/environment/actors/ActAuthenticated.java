@@ -20,7 +20,6 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.design.JIntI
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 
@@ -58,7 +57,7 @@ public interface ActAuthenticated extends java.rmi.Remote, Serializable, JIntIsA
 	 * @throws RemoteException Thrown if the server isn't online
 	 * @throws NotBoundException Thrown if the server has not been bound in the RMI settings
 	 */
-	public PtBoolean oeEnterQuestion(DtLogin aDtLogin, DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException, NotBoundException;
+	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer) throws RemoteException, NotBoundException;
 	/**
 	 * Allows a user to logoff to the system.
 	 *

@@ -25,7 +25,6 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
@@ -115,7 +114,7 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 	 * lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.
 	 * DtAnswer)
 	 */
-	synchronized public PtBoolean oeEnterQuestion(DtLogin aDtLogin, DtQuestion aDtQuestion, DtAnswer aDtAnswer)
+	synchronized public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer)
 			throws RemoteException, NotBoundException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
@@ -129,12 +128,12 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 		// set up ActAuthenticated instance that performs the request
 		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
 
-		log.info("message ActAuthenticated.oeEnterQuestion sent to system");
-		PtBoolean res = iCrashSys_Server.oeEnterQuestion(aDtLogin, aDtQuestion, aDtAnswer);
+		log.info("message ActAuthenticated.oeEnterAnswer sent to system");
+		PtBoolean res = iCrashSys_Server.oeEnterAnswer(aDtLogin, aDtAnswer);
 
 		if (res.getValue() == true)
-			log.info("operation oeEnterQuestion successfully executed by the system");
-		else log.error("operation oeEnterQuestion was not a success by the system");
+			log.info("operation oeEnterAnswer successfully executed by the system");
+		else log.error("operation oeEnterAnswer was not a success by the system");
 
 		return res;
 	}

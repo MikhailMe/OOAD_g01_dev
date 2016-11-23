@@ -1179,7 +1179,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer)
 	 */
 	//actAuthenticated Actor
-	public PtBoolean oeEnterQuestion(DtLogin aDtLogin, DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException {
+	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer) throws RemoteException {
 		try {
 			//PreP1
 			isSystemStarted();

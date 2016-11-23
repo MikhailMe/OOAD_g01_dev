@@ -21,7 +21,6 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActPro
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
@@ -77,12 +76,11 @@ public abstract class AbstractUserController implements HasListeners {
 	 * @throws ServerOfflineException Thrown if the server is currently offline
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
-	public PtBoolean oeEnterQuestion(String login, String question, String answer) throws ServerOfflineException, ServerNotBoundException{
+	public PtBoolean oeEnterAnswer(String login, String answer) throws ServerOfflineException, ServerNotBoundException{
 		DtLogin aDtLogin = new DtLogin(new PtString(login));
-		DtQuestion aDtQuestion = new DtQuestion(new PtString(question));
 		DtAnswer aDtAnswer = new DtAnswer(new PtString(answer));
 		try {
-			return this.getAuth().oeEnterQuestion(aDtLogin, aDtQuestion, aDtAnswer);
+			return this.getAuth().oeEnterAnswer(aDtLogin, aDtAnswer);
 		} catch (RemoteException e) {
 			Log4JUtils.getInstance().getLogger().error(e);
 			throw new ServerOfflineException();

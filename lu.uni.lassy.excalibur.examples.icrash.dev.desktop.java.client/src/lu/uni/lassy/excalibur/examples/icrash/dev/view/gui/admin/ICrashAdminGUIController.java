@@ -62,9 +62,6 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	* When replacing, remember to reassign the correct methods to the button event methods and set the correct types for the tableviews
 	*/
 	
-	// String which contains additional question
-	private String strQuestion;
-	
 	// String which contains answer for the additional question
 	private String strAnswer;
 	
@@ -106,10 +103,9 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	// This method is called when you click on the button bttnLogon
 	private void entry(){
 		try {
-			strQuestion = txtFldQuestion.getText();
 			strAnswer = pssFldAnswer.getText();
 			String strLogin = txtfldAdminUserName.getText();
-			if (userController.oeEnterQuestion(strLogin, strQuestion, strAnswer).getValue()){
+			if (userController.oeEnterAnswer(strLogin, strAnswer).getValue()){
 				brdpnAdditionalQuestion.setVisible(false);
 				pssFldAnswer.setText("");
 				logonShowPanes(true);
@@ -362,7 +358,6 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 									if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
 										System.out.println("Вы ничего не ввели");
 									if(!txtChangeQuestion.getText().isEmpty() && !txtChangeAnswer.getText().isEmpty()){
-										strQuestion = txtChangeQuestion.getText();
 										strAnswer = txtChangeAnswer.getText();
 										anchrpnCoordinatorDetails.getChildren().remove(grdpn);
 									}
