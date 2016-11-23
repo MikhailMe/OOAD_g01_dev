@@ -115,7 +115,7 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 	 * lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.
 	 * DtAnswer)
 	 */
-	synchronized public PtBoolean oeEnterQuestion(DtQuestion aDtQuestion, DtAnswer aDtAnswer)
+	synchronized public PtBoolean oeEnterQuestion(DtLogin aDtLogin, DtQuestion aDtQuestion, DtAnswer aDtAnswer)
 			throws RemoteException, NotBoundException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
@@ -130,7 +130,7 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
 
 		log.info("message ActAuthenticated.oeEnterQuestion sent to system");
-		PtBoolean res = iCrashSys_Server.oeEnterQuestion(aDtQuestion, aDtAnswer);
+		PtBoolean res = iCrashSys_Server.oeEnterQuestion(aDtLogin, aDtQuestion, aDtAnswer);
 
 		if (res.getValue() == true)
 			log.info("operation oeEnterQuestion successfully executed by the system");

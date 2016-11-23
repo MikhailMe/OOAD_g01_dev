@@ -1179,7 +1179,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer)
 	 */
 	//actAuthenticated Actor
-	public PtBoolean oeEnterQuestion(DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException {
+	public PtBoolean oeEnterQuestion(DtLogin aDtLogin, DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException {
 		try {
 			//PreP1
 			isSystemStarted();
@@ -1189,11 +1189,11 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			 *such credential in the ctAuthenticatedInstances data structure
 			 */
 		
-			//CtAuthenticated ctAuthenticatedInstance = cmpSystemCtAuthenticated.get(aDtLogin.value.getValue());
+			CtAuthenticated ctAuthenticatedInstance = cmpSystemCtAuthenticated.get(aDtLogin.value.getValue());
 			
 			//PostP1
 			if (aDtAnswer.value.getValue().equals(answerForAdmin.value.getValue())){
-				//ctAuthenticatedInstance.vpIsLogged = new PtBoolean(true);
+				ctAuthenticatedInstance.vpIsLogged = new PtBoolean(true);
 				PtString aMessage = new PtString("Your answer is right. Welcome! ...");
 				currentRequestingAuthenticatedActor.ieMessage(aMessage);
 				return new PtBoolean(true);

@@ -108,7 +108,8 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		try {
 			strQuestion = txtFldQuestion.getText();
 			strAnswer = pssFldAnswer.getText();
-			if (userController.oeEnterQuestion(strQuestion, strAnswer).getValue()){
+			String strLogin = txtfldAdminUserName.getText();
+			if (userController.oeEnterQuestion(strLogin, strQuestion, strAnswer).getValue()){
 				brdpnAdditionalQuestion.setVisible(false);
 				pssFldAnswer.setText("");
 				logonShowPanes(true);

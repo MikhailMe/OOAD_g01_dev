@@ -77,11 +77,12 @@ public abstract class AbstractUserController implements HasListeners {
 	 * @throws ServerOfflineException Thrown if the server is currently offline
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
-	public PtBoolean oeEnterQuestion(String question, String answer) throws ServerOfflineException, ServerNotBoundException{
+	public PtBoolean oeEnterQuestion(String login, String question, String answer) throws ServerOfflineException, ServerNotBoundException{
+		DtLogin aDtLogin = new DtLogin(new PtString(login));
 		DtQuestion aDtQuestion = new DtQuestion(new PtString(question));
 		DtAnswer aDtAnswer = new DtAnswer(new PtString(answer));
 		try {
-			return this.getAuth().oeEnterQuestion(aDtQuestion, aDtAnswer);
+			return this.getAuth().oeEnterQuestion(aDtLogin, aDtQuestion, aDtAnswer);
 		} catch (RemoteException e) {
 			Log4JUtils.getInstance().getLogger().error(e);
 			throw new ServerOfflineException();
