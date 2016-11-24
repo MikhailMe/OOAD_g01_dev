@@ -19,9 +19,11 @@ import java.rmi.registry.Registry;
 import java.util.Iterator;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.RmiUtils;
@@ -107,8 +109,7 @@ public class ActAdministratorImpl extends ActAuthenticatedImpl implements
 	}
 
 	
-	synchronized public PtBoolean oeOptions(
-			String txtQuestion, String txtAnswer) throws RemoteException, NotBoundException {
+	synchronized public PtBoolean oeOptions(DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException, NotBoundException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
 
@@ -121,11 +122,11 @@ public class ActAdministratorImpl extends ActAuthenticatedImpl implements
 		//set up ActAuthenticated instance that performs the request
 		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
 
-		log.info("message ActAdministrator.oeAddCoordinator sent to system");
-		PtBoolean res = iCrashSys_Server.oeOptions(txtQuestion, txtAnswer);
+		log.info("message ActAdministrator.oeOptions sent to system");
+		PtBoolean res = iCrashSys_Server.oeOptions(aDtQuestion, aDtAnswer);
 
 		if (res.getValue() == true)
-			log.info("operation oeAddCoordinator successfully executed by the system");
+			log.info("operation oeOptions successfully executed by the system");
 
 		return res;
 	}
@@ -165,24 +166,6 @@ public class ActAdministratorImpl extends ActAuthenticatedImpl implements
 		}
 		return new PtBoolean(true);
 	}
-
-	
-	
-	public PtBoolean ieOptions() {
-		for (Iterator<ActProxyAuthenticated> iterator = listeners.iterator(); iterator
-				.hasNext();) {
-			ActProxyAuthenticated aProxy = iterator.next();
-			try {
-				if (aProxy instanceof ActProxyAdministrator)
-					((ActProxyAdministrator) aProxy).ieOptions();
-			} catch (RemoteException e) {
-				Log4JUtils.getInstance().getLogger().error(e);
-				iterator.remove();
-			}
-		}
-		return new PtBoolean(true);
-	}
-	
 	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAdministrator#ieCoordinatorUpdated()

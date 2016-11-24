@@ -22,9 +22,11 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.controller.exceptions.ServerOf
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAdministrator;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated.UserType;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.design.JIntIs;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
@@ -116,16 +118,14 @@ public class AdminController extends AbstractUserController {
 	 * @throws ServerOfflineException
 	 * @throws ServerNotBoundException
 	 */
-	/*
-	 *  OPTIONS FOR ADMINISTRATOR'S AUTENTIFICATION
-	 * 
-	 * */
 	
-	public PtBoolean oeOptions(String txtChangeQuestinon, String txtChangeAnswer) throws ServerOfflineException, ServerNotBoundException{
+	public PtBoolean oeOptions(String question, String answer) throws ServerOfflineException, ServerNotBoundException{
+		DtQuestion aDtQuestion = new DtQuestion(new PtString(question));
+		DtAnswer aDtAnswer = new DtAnswer(new PtString(answer));
 		if (getUserType() == UserType.Admin){
 			ActProxyAdministratorImpl actorAdmin = (ActProxyAdministratorImpl)getAuth();
 			try {
-				return actorAdmin.oeOptions(txtChangeQuestinon, txtChangeAnswer);
+				return actorAdmin.oeOptions(aDtQuestion, aDtAnswer);
 			} catch (RemoteException e) {
 				Log4JUtils.getInstance().getLogger().error(e);
 				throw new ServerOfflineException();

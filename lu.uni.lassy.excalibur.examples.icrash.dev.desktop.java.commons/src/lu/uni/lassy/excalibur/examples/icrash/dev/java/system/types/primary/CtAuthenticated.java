@@ -50,6 +50,13 @@ public abstract class CtAuthenticated implements Serializable {
 			return new PtBoolean(true); 
 	}
 	
+	public PtBoolean initQA(DtQuestion aDtQuestion, DtAnswer aDtAnswer){
+		question = aDtQuestion;
+		answer = aDtAnswer;
+		vpIsLogged = new PtBoolean(false);
+		return new PtBoolean(true);
+	}
+	
 	/* (non-Javadoc)
 	 * @see java.lang.Object#toString()
 	 */

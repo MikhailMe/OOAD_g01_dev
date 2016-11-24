@@ -16,9 +16,11 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActAdministrator;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAdministrator;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
 import lu.uni.lassy.excalibur.examples.icrash.dev.model.Message;
@@ -65,9 +67,12 @@ public class ActProxyAdministratorImpl extends ActProxyAuthenticatedImpl impleme
 			return new PtBoolean(false);
 	}
 	
-	synchronized public PtBoolean oeOptions(String txtChangeQuestinon, String txtChangeAnswer) throws RemoteException, NotBoundException {
+	/* (non-Javadoc)
+	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAdministrator#oeOptions(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer)
+	 */
+	synchronized public PtBoolean oeOptions(DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException, NotBoundException {
 		if(getServerSideActor() != null)
-			return ((ActAdministrator) getServerSideActor()).oeOptions(txtChangeQuestinon,txtChangeAnswer);
+			return ((ActAdministrator) getServerSideActor()).oeOptions(aDtQuestion,aDtAnswer);
 		else
 			return new PtBoolean(false);
 	}

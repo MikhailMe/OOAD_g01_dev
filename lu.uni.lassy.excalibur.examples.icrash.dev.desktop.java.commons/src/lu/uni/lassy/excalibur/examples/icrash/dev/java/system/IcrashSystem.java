@@ -37,6 +37,7 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtGP
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPhoneNumber;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtAlertStatus;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisStatus;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisType;
@@ -371,14 +372,13 @@ public interface IcrashSystem extends Remote {
 	public PtBoolean oeDeleteCoordinator(DtCoordinatorID aDtCoordinatorID) throws RemoteException;
 	
 	
-	
 	/**
-	 * @param txtQuestion
-	 * @param txtPassword
+	 * @param aDtQuestion
+	 * @param aDtAnswer
 	 * @return The success of the method
 	 * @throws RemoteException
 	 */
-	public PtBoolean oeOptions(String txtQuestion, String txtPassword) throws RemoteException; 
+	public PtBoolean oeOptions(DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException; 
 	
 	/**
 	 * Runs the function of sollicitating crisis handling, if a crisis hasn't been handled with the delay, coordinators will be warned. If it passes max delax, it will be auto assigned out 

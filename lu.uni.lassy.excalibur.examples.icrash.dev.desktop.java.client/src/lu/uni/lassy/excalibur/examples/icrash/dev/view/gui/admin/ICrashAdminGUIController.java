@@ -77,6 +77,12 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	@FXML
 	private Button bttnLogon;
 	
+	@FXML
+	private TextField txtChangeQuestion = new TextField();
+	
+	@FXML
+	private PasswordField txtChangeAnswer = new PasswordField();
+	
 	// Pane, which contains txtFldQuestion, pssFldAnswer, bttnLogon
 	@FXML
 	private BorderPane brdpnAdditionalQuestion;
@@ -235,7 +241,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		/** Deleting a coordinator. */
 		Delete,
 		
-		/* Options for administrator's authentication. */
+		/** Options for administrator's authentication. */
 		Options
 	}
 	
@@ -295,21 +301,20 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		PasswordField psswrdfldPassword = new PasswordField();
 		txtfldUserID.setPromptText("User ID");
 		Button bttntypOK = null;
-		TextField txtChangeQuestion = new TextField();
-		TextField txtChangeAnswer = new TextField();
 		GridPane grdpn = new GridPane();
-		grdpn.add(txtfldUserID, 1, 1);
 		switch(type){
 		case Add:
 			bttntypOK = new Button("Create");
 			txtfldUserName.setPromptText("User name");
 			psswrdfldPassword.setPromptText("Password");
+			grdpn.add(txtfldUserID, 1, 1);
 			grdpn.add(txtfldUserName, 1, 2);
 			grdpn.add(psswrdfldPassword, 1, 3);
 			grdpn.add(bttntypOK, 1, 4);
 			break;
 		case Delete:
 			bttntypOK = new Button("Delete");
+			grdpn.add(txtfldUserID, 1, 1);
 			grdpn.add(bttntypOK, 1, 2);
 			break;
 		case Options:
@@ -318,9 +323,9 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 			bttntypOK = new Button("Change");
 			txtChangeQuestion.setPrefWidth(200);
 			txtChangeAnswer.setPrefWidth(200);
-			grdpn.add(txtChangeQuestion, 1, 1);
-			grdpn.add(txtChangeAnswer, 1, 2);
-			grdpn.add(bttntypOK, 1, 3);
+			grdpn.add(txtChangeQuestion, 1, 3);
+			grdpn.add(txtChangeAnswer, 1, 4);
+			grdpn.add(bttntypOK, 1, 5);
 		}
 		bttntypOK.setDefaultButton(true);
 		bttntypOK.setOnAction(new EventHandler<ActionEvent>() {
@@ -351,25 +356,16 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 							else
 								showErrorMessage("Unable to delete coordinator", "An error occured when deleting the coordinator");
 							break;
-							
-						// MY CODE
 						case Options:{
-								if (userController.oeOptions(txtChangeQuestion.getText(), txtChangeAnswer.getText()).getValue()){
-									if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
-										System.out.println("Вы ничего не ввели");
-									if(!txtChangeQuestion.getText().isEmpty() && !txtChangeAnswer.getText().isEmpty()){
-										strAnswer = txtChangeAnswer.getText();
-										anchrpnCoordinatorDetails.getChildren().remove(grdpn);
-									}
-									else
-										showErrorMessage("Unable to change options", "An error occured when changing the options");
-									break;
-								}
-							}
+							userController.oeOptions(txtChangeQuestion.getText(), txtChangeAnswer.getText());
+							txtChangeQuestion.setText("");
+							txtChangeAnswer.setText("");
+							anchrpnCoordinatorDetails.getChildren().remove(grdpn);
 						}
-					} catch (ServerOfflineException | ServerNotBoundException | IncorrectFormatException e) {
-						showExceptionErrorMessage(e);
-					}					
+						}
+						} catch (ServerOfflineException | ServerNotBoundException | IncorrectFormatException e) {
+							showExceptionErrorMessage(e);
+						}					
 				}
 			}
 		});
@@ -380,18 +376,25 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		AnchorPane.setRightAnchor(grdpn, 0.0);
 		txtfldUserID.requestFocus();
 	}
+
+	@FXML
+	public void bttnBottomOptions_OnClick(ActionEvent event) {
+    	optionsOnClick();
+    }
 	
-	
-/*	private void optionsOnClick(TextField txtChangeQuestion, TextField txtChangeAnswer, GridPane grdpn){
+	private void optionsOnClick(){
+		Log4JUtils.getInstance().getLogger().error("SOSKA EBANA9!!!");
 		if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
 			Log4JUtils.getInstance().getLogger().error("PLEASE ENTER DATA");
 		else if (!txtChangeQuestion.getText().isEmpty() && !txtChangeAnswer.getText().isEmpty()){
-			strQuestion = txtChangeQuestion.getText();
-			strAnswer = txtChangeAnswer.getText();
-			anchrpnCoordinatorDetails.getChildren().remove(grdpn);
+			try{
+				userController.oeOptions(txtChangeQuestion.getText(), txtChangeAnswer.getText());
+			}catch (ServerOfflineException | ServerNotBoundException e) {
+				e.printStackTrace();;
+			}
 			Log4JUtils.getInstance().getLogger().error("SUCCESS CHANGE PASSWORD");
 		}
-	}*/
+	}
 	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController#logon()

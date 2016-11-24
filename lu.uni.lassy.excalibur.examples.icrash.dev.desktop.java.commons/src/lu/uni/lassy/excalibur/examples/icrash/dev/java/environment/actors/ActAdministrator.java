@@ -15,9 +15,11 @@ package lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 
 /**
@@ -58,7 +60,7 @@ public interface ActAdministrator extends ActAuthenticated {
 	 * @throws RemoteException
 	 * @throws NotBoundException
 	 */
-	public PtBoolean oeOptions(String txtQuestion, String txtAnswer)
+	public PtBoolean oeOptions(DtQuestion aDtQuestion, DtAnswer aDtAnswer)
 			throws RemoteException, NotBoundException;
 	
 	/**
@@ -77,12 +79,6 @@ public interface ActAdministrator extends ActAuthenticated {
 	 */
 	public PtBoolean ieCoordinatorDeleted() throws RemoteException;
 	
-	
-	/**
-	 * @return The success of the method
-	 * @throws RemoteException Thrown if the server is offline
-	 */
-	public PtBoolean ieOptions() throws RemoteException;
 	
 	/**
 	 * A message sent to the listening actor saying the coordinator was updated.

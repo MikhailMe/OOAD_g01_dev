@@ -103,9 +103,6 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 
 	// Messir compositions
 	
-	/** A hashtable of all questions and answers for the administrator in the system*/
-	Hashtable<String, String> cmpQuestionAnwer = new Hashtable<String, String>();
-	
 	/**  A hashtable of all administrators in the system, stored by their login as a key. */
 	Hashtable<String, CtAdministrator> cmpSystemCtAdministrator = new Hashtable<String, CtAdministrator>();
 	
@@ -592,7 +589,7 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			DtLogin aLogin = new DtLogin(new PtString(adminName));
 			DtPassword aPwd = new DtPassword(new PtString("7WXC1359"));
 			ctAdmin.init(aLogin, aPwd);
-			questionForAdmin = new DtQuestion(new PtString("What name of you fucking cat sosk>??"));
+			questionForAdmin = new DtQuestion(new PtString("What name of you cat?"));
 			answerForAdmin = new DtAnswer(new PtString("murzik"));
 			/*
 			PostF 7 the association between ctAdministrator and actAdministrator is made of 
@@ -1319,6 +1316,24 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 		}
 	}
 
+	
+	@Override
+	public PtBoolean oeOptions(DtQuestion aDtQuestion, DtAnswer aDtAnswer) throws RemoteException {
+		try {
+			//PreP1
+			isSystemStarted();
+			//PreP2
+			isAdminLoggedIn();
+			questionForAdmin = aDtQuestion;
+			answerForAdmin = aDtAnswer;
+			PtString aMessage = new PtString("You have successfully changed an additional question and answer");
+			currentRequestingAuthenticatedActor.ieMessage(aMessage);
+		} catch (Exception ex) {
+			log.error("Exception in oeOptions..." + ex);
+		}
+		return new PtBoolean(true);
+	}
+	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeUpdateCoordinator(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword)
 	 */
@@ -1423,25 +1438,5 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			log.error("Exception in oeSetClock..." + ex);
 			return new PtBoolean(false);
 		}
-	}
-
-	@Override
-	public PtBoolean oeOptions(String txtQuestion, String txtPassword) throws RemoteException {
-		try {
-			//PreP1
-			isSystemStarted();
-			//PreP2
-			isAdminLoggedIn();
-			Registry registry = LocateRegistry.getRegistry(RmiUtils.getInstance().getHost(), RmiUtils.getInstance().getPort());
-			IcrashEnvironment env = (IcrashEnvironment) registry.lookup("iCrashEnvironment");
-			cmpQuestionAnwer.put(txtQuestion, txtPassword);
-			//PostF1
-			ActAdministrator admin = (ActAdministrator) currentRequestingAuthenticatedActor;
-			admin.ieOptions();
-		} catch (Exception ex) {
-			log.error("Exception in oeOptions..." + ex);
-		}
-
-		return new PtBoolean(true);
 	}
 }
