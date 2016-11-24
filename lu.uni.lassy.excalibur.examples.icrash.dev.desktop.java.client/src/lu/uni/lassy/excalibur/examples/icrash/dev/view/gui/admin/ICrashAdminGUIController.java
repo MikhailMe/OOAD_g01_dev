@@ -65,11 +65,11 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	// String which contains answer for the additional question
 	private String strAnswer;
 	
-	// Field, where we can see the additional question
+	// Field, where we can see an additional question
 	@FXML
 	private TextField txtFldQuestion;
 
-	// Field, where we can write answer for the additional question
+	// Field, where we can write answer for an additional question
 	@FXML
 	private PasswordField pssFldAnswer;
 
@@ -77,9 +77,11 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	@FXML
 	private Button bttnLogon;
 	
+	// Field, where we can write an additional question for change
 	@FXML
 	private TextField txtChangeQuestion = new TextField();
 	
+	// Field, where we can write answer for change
 	@FXML
 	private PasswordField txtChangeAnswer = new PasswordField();
 	
@@ -375,25 +377,6 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 		AnchorPane.setBottomAnchor(grdpn, 0.0);
 		AnchorPane.setRightAnchor(grdpn, 0.0);
 		txtfldUserID.requestFocus();
-	}
-
-	@FXML
-	public void bttnBottomOptions_OnClick(ActionEvent event) {
-    	optionsOnClick();
-    }
-	
-	private void optionsOnClick(){
-		Log4JUtils.getInstance().getLogger().error("SOSKA EBANA9!!!");
-		if (txtChangeQuestion.getText().isEmpty() || txtChangeAnswer.getText().isEmpty())
-			Log4JUtils.getInstance().getLogger().error("PLEASE ENTER DATA");
-		else if (!txtChangeQuestion.getText().isEmpty() && !txtChangeAnswer.getText().isEmpty()){
-			try{
-				userController.oeOptions(txtChangeQuestion.getText(), txtChangeAnswer.getText());
-			}catch (ServerOfflineException | ServerNotBoundException e) {
-				e.printStackTrace();;
-			}
-			Log4JUtils.getInstance().getLogger().error("SUCCESS CHANGE PASSWORD");
-		}
 	}
 	
 	/* (non-Javadoc)
