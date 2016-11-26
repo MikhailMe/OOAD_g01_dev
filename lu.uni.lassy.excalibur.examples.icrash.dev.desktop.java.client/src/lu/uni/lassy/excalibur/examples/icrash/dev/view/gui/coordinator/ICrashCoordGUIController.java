@@ -14,8 +14,11 @@ package lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.coordinator;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 import java.util.Optional;
 import java.util.ResourceBundle;
+
+import javax.crypto.NoSuchPaddingException;
 
 import javafx.util.Callback;
 import lu.uni.lassy.excalibur.examples.icrash.dev.controller.CoordinatorController;
@@ -182,9 +185,11 @@ public class ICrashCoordGUIController extends AbstractAuthGUIController {
      * Button event that deals with logging on the user
      *
      * @param event The event type fired, we do not need it's details
+     * @throws NoSuchAlgorithmException 
+     * @throws NoSuchPaddingException 
      */
     @FXML
-    void bttnCoordLogon_OnClick(ActionEvent event) {
+    void bttnCoordLogon_OnClick(ActionEvent event) throws NoSuchPaddingException, NoSuchAlgorithmException {
     	logon();
     }
 
@@ -448,7 +453,7 @@ public class ICrashCoordGUIController extends AbstractAuthGUIController {
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController#logon()
 	 */
 	@Override
-	public void logon() {
+	public void logon() throws NoSuchPaddingException, NoSuchAlgorithmException {
 		if(txtfldCoordLogonUserName.getText().length() > 0 && psswrdfldCoordLogonPassword.getText().length() > 0){
 			try {
 				String isCoord = userController.oeLogin(txtfldCoordLogonUserName.getText(), psswrdfldCoordLogonPassword.getText()).getValue();

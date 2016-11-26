@@ -14,6 +14,10 @@ package lu.uni.lassy.excalibur.examples.icrash.dev.controller;
 
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
 import lu.uni.lassy.excalibur.examples.icrash.dev.controller.exceptions.ServerNotBoundException;
 import lu.uni.lassy.excalibur.examples.icrash.dev.controller.exceptions.ServerOfflineException;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActProxyAuthenticated;
@@ -53,7 +57,8 @@ public abstract class AbstractUserController implements HasListeners {
 	 * @throws ServerOfflineException Thrown if the server is currently offline
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
-	public PtString oeLogin(String login, String password) throws ServerOfflineException, ServerNotBoundException{
+	public PtString oeLogin(String login, String password)
+			throws ServerOfflineException, ServerNotBoundException, NoSuchPaddingException, NoSuchAlgorithmException{
 		DtLogin aDtLogin = new DtLogin(new PtString(login));
 		DtPassword aDtPassword = new DtPassword(new PtString(password));
 		try {
@@ -76,7 +81,7 @@ public abstract class AbstractUserController implements HasListeners {
 	 * @throws ServerOfflineException Thrown if the server is currently offline
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
-	public PtBoolean oeEnterAnswer(String login, String answer) throws ServerOfflineException, ServerNotBoundException{
+	public PtBoolean oeEnterAnswer(String login, String answer) throws ServerOfflineException, ServerNotBoundException, NoSuchPaddingException, NoSuchAlgorithmException{
 		DtLogin aDtLogin = new DtLogin(new PtString(login));
 		DtAnswer aDtAnswer = new DtAnswer(new PtString(answer));
 		try {

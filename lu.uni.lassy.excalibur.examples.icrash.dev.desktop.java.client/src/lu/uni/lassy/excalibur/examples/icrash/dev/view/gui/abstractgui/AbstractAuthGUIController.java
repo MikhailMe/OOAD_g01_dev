@@ -12,6 +12,10 @@
  ******************************************************************************/
 package lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui;
 
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
+
 /**
  * The Class AbstractAuthGUIController.
  * Used to specify a GUI controller should allow a user to logon and logoff
@@ -20,8 +24,10 @@ public abstract class AbstractAuthGUIController extends AbstractGUIController im
 	
 	/**
 	 * A method that allows the user to logon to the sever. Will often call a function from inside the user's specific controller class.
+	 * @throws NoSuchAlgorithmException, NoSuchPaddingException, NoSuchAlgorithmException 
+	 * @throws NoSuchPaddingException 
 	 */
-	public abstract void logon();
+	public abstract void logon() throws NoSuchPaddingException, NoSuchAlgorithmException, NoSuchPaddingException, NoSuchAlgorithmException;
 	
 	/**
 	 * A method that allows the user to logoff the sever. Will often call a function from inside the user's specific controller class.

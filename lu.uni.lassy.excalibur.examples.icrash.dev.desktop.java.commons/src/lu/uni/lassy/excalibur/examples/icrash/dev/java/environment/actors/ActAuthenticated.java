@@ -15,6 +15,9 @@ package lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors;
 import java.io.Serializable;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
+
+import javax.crypto.NoSuchPaddingException;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.design.JIntIsActor;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
@@ -45,7 +48,7 @@ public interface ActAuthenticated extends java.rmi.Remote, Serializable, JIntIsA
 	 * @throws RemoteException Thrown if the server isn't online
 	 * @throws NotBoundException Thrown if the server has not been bound in the RMI settings
 	 */
-	public PtString oeLogin(DtLogin aDtLogin,DtPassword aDtPassword) throws RemoteException, NotBoundException;
+	public PtString oeLogin(DtLogin aDtLogin,DtPassword aDtPassword) throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException;
 	
 	
 	/**
@@ -56,8 +59,10 @@ public interface ActAuthenticated extends java.rmi.Remote, Serializable, JIntIsA
 	 * @return The success of the method
 	 * @throws RemoteException Thrown if the server isn't online
 	 * @throws NotBoundException Thrown if the server has not been bound in the RMI settings
+	 * @throws NoSuchAlgorithmException 
+	 * @throws NoSuchPaddingException 
 	 */
-	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer) throws RemoteException, NotBoundException;
+	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer) throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException;
 	/**
 	 * Allows a user to logoff to the system.
 	 *

@@ -14,8 +14,11 @@ package lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.admin;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+
+import javax.crypto.NoSuchPaddingException;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.controller.AdminController;
 import lu.uni.lassy.excalibur.examples.icrash.dev.controller.SystemStateController;
@@ -91,7 +94,8 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	
 	// Action for the bttnLogon
 	@FXML
-    public void bttnBottomLogon_OnClick(ActionEvent event){
+    public void bttnBottomLogon_OnClick(ActionEvent event)
+    		throws NoSuchPaddingException, NoSuchAlgorithmException{
     	entry();
     }
 	
@@ -109,7 +113,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	}
 	
 	// This method is called when you click on the button bttnLogon
-	private void entry(){
+	private void entry() throws NoSuchPaddingException, NoSuchAlgorithmException{
 		try {
 			strAnswer = pssFldAnswer.getText();
 			String strLogin = txtfldAdminUserName.getText();
@@ -206,7 +210,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
      * @param event The event type thrown, we do not need this, but it must be specified
      */
     @FXML
-    void bttnBottomLoginPaneLogin_OnClick(ActionEvent event) {
+    void bttnBottomLoginPaneLogin_OnClick(ActionEvent event) throws NoSuchPaddingException, NoSuchAlgorithmException{
     	logon();
     }
 
@@ -383,7 +387,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController#logon()
 	 */
 	@Override
-	public void logon() {
+	public void logon() throws NoSuchPaddingException, NoSuchAlgorithmException{
 			if(txtfldAdminUserName.getText().length() > 0 && psswrdfldAdminPassword.getText().length() > 0){
 				try{
 					String answer = userController.oeLogin(txtfldAdminUserName.getText(), psswrdfldAdminPassword.getText()).getValue();
