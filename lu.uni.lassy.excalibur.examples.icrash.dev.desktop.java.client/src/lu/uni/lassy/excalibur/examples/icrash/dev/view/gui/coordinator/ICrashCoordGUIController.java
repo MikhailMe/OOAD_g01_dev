@@ -11,6 +11,7 @@
  *     Thomas Mortimer - Updated client to MVC and added new design patterns
  ******************************************************************************/
 package lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.coordinator;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -189,7 +190,7 @@ public class ICrashCoordGUIController extends AbstractAuthGUIController {
      * @throws NoSuchPaddingException 
      */
     @FXML
-    void bttnCoordLogon_OnClick(ActionEvent event) throws NoSuchPaddingException, NoSuchAlgorithmException {
+    void bttnCoordLogon_OnClick(ActionEvent event) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException {
     	logon();
     }
 
@@ -453,7 +454,7 @@ public class ICrashCoordGUIController extends AbstractAuthGUIController {
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController#logon()
 	 */
 	@Override
-	public void logon() throws NoSuchPaddingException, NoSuchAlgorithmException {
+	public void logon() throws NoSuchPaddingException, NoSuchAlgorithmException, IOException {
 		if(txtfldCoordLogonUserName.getText().length() > 0 && psswrdfldCoordLogonPassword.getText().length() > 0){
 			try {
 				String isCoord = userController.oeLogin(txtfldCoordLogonUserName.getText(), psswrdfldCoordLogonPassword.getText()).getValue();

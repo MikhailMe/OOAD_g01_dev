@@ -13,6 +13,8 @@
 
 package lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors;
 
+import java.io.File;
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -30,6 +32,7 @@ import javax.crypto.NoSuchPaddingException;
 import javax.crypto.spec.SecretKeySpec;
 import java.security.InvalidKeyException;
 import java.util.Random;
+import java.util.Scanner;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
@@ -110,7 +113,7 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 	 * DtPassword)
 	 */
 	synchronized public PtString oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
-			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException {
+			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException, IOException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
 
@@ -125,8 +128,11 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 
 		log.info("message ActAuthenticated.oeLogin sent to system");
 		
-		String temp = "u7bNS5,w0~k8HGb-";
-        SecretKeySpec key = gen(temp);
+		Scanner in = new Scanner(new File("key.txt"));
+		SecretKeySpec key = gen(in.next());
+		in.close();
+		log.info("Secret key obtained from a \"secret channel\"");
+		
         DtByteArray BTlogin = new DtByteArray(encrypt(key, aDtLogin.toString()));
         DtByteArray BTpassword = new DtByteArray(encrypt(key, aDtPassword.toString()));
         log.info("Your data was encrypted on the client");
@@ -152,7 +158,7 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 	 * DtAnswer)
 	 */
 	synchronized public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer)
-			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException {
+			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException, IOException {
 
 		Logger log = Log4JUtils.getInstance().getLogger();
 
@@ -166,8 +172,10 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
 
 		
-		String temp = "u7bNS5,w0~k8HGb-";
-        SecretKeySpec key = gen(temp);
+		Scanner in = new Scanner(new File("key.txt"));
+		SecretKeySpec key = gen(in.next());
+		in.close();
+		log.info("Secret key obtained from a \"secret channel\"");
         DtByteArray BTlogin = new DtByteArray(encrypt(key, aDtLogin.toString()));
         DtByteArray BTAnswer = new DtByteArray(encrypt(key, aDtAnswer.toString()));
         log.info("Your data was encrypted on the client");

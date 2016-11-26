@@ -11,6 +11,7 @@
  *     Thomas Mortimer - Updated client to MVC and added new design patterns
  ******************************************************************************/
 package lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.admin;
+import java.io.IOException;
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -68,11 +69,11 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	// String which contains answer for the additional question
 	private String strAnswer;
 	
-	// Field, where we can see an additional question
+	// Field, where we can see the additional question
 	@FXML
 	private TextField txtFldQuestion;
 
-	// Field, where we can write answer for an additional question
+	// Field, where we can write answer for the additional question
 	@FXML
 	private PasswordField pssFldAnswer;
 
@@ -80,11 +81,9 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	@FXML
 	private Button bttnLogon;
 	
-	// Field, where we can write an additional question for change
 	@FXML
 	private TextField txtChangeQuestion = new TextField();
 	
-	// Field, where we can write answer for change
 	@FXML
 	private PasswordField txtChangeAnswer = new PasswordField();
 	
@@ -95,7 +94,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	// Action for the bttnLogon
 	@FXML
     public void bttnBottomLogon_OnClick(ActionEvent event)
-    		throws NoSuchPaddingException, NoSuchAlgorithmException{
+    		throws NoSuchPaddingException, NoSuchAlgorithmException, IOException{
     	entry();
     }
 	
@@ -113,7 +112,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	}
 	
 	// This method is called when you click on the button bttnLogon
-	private void entry() throws NoSuchPaddingException, NoSuchAlgorithmException{
+	private void entry() throws NoSuchPaddingException, NoSuchAlgorithmException, IOException{
 		try {
 			strAnswer = pssFldAnswer.getText();
 			String strLogin = txtfldAdminUserName.getText();
@@ -210,7 +209,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
      * @param event The event type thrown, we do not need this, but it must be specified
      */
     @FXML
-    void bttnBottomLoginPaneLogin_OnClick(ActionEvent event) throws NoSuchPaddingException, NoSuchAlgorithmException{
+    void bttnBottomLoginPaneLogin_OnClick(ActionEvent event) throws NoSuchPaddingException, NoSuchAlgorithmException, IOException{
     	logon();
     }
 
@@ -387,7 +386,7 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.abstractgui.AbstractAuthGUIController#logon()
 	 */
 	@Override
-	public void logon() throws NoSuchPaddingException, NoSuchAlgorithmException{
+	public void logon() throws NoSuchPaddingException, NoSuchAlgorithmException, IOException{
 			if(txtfldAdminUserName.getText().length() > 0 && psswrdfldAdminPassword.getText().length() > 0){
 				try{
 					String answer = userController.oeLogin(txtfldAdminUserName.getText(), psswrdfldAdminPassword.getText()).getValue();

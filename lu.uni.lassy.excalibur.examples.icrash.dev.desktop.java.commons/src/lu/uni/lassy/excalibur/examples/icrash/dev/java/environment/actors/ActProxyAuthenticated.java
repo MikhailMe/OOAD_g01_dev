@@ -13,6 +13,7 @@
 
 package lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors;
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
@@ -51,7 +52,7 @@ public interface ActProxyAuthenticated extends Remote, JIntHasServerSideActor, J
 	 * @throws NotBoundException Thrown if the server has not been bound correctly in RMI settings
 	 */
 	public PtString oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
-			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException;
+			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException, IOException;
 	
 	/**
 	 * Performs the oeLogin function with the username and password provided.
@@ -63,7 +64,7 @@ public interface ActProxyAuthenticated extends Remote, JIntHasServerSideActor, J
 	 * @throws NotBoundException Thrown if the server has not been bound correctly in RMI settings
 	 */
 	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer) 
-			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException;
+			throws RemoteException, NotBoundException, NoSuchPaddingException, NoSuchAlgorithmException, IOException;
 
 	/**
 	 * Performs the oeLogut function with the current user.

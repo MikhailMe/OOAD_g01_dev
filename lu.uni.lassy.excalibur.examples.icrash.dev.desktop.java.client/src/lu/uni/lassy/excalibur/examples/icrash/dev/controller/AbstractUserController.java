@@ -12,6 +12,7 @@
  ******************************************************************************/
 package lu.uni.lassy.excalibur.examples.icrash.dev.controller;
 
+import java.io.IOException;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.security.NoSuchAlgorithmException;
@@ -58,7 +59,7 @@ public abstract class AbstractUserController implements HasListeners {
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
 	public PtString oeLogin(String login, String password)
-			throws ServerOfflineException, ServerNotBoundException, NoSuchPaddingException, NoSuchAlgorithmException{
+			throws ServerOfflineException, ServerNotBoundException, NoSuchPaddingException, NoSuchAlgorithmException, IOException{
 		DtLogin aDtLogin = new DtLogin(new PtString(login));
 		DtPassword aDtPassword = new DtPassword(new PtString(password));
 		try {
@@ -81,7 +82,7 @@ public abstract class AbstractUserController implements HasListeners {
 	 * @throws ServerOfflineException Thrown if the server is currently offline
 	 * @throws ServerNotBoundException Thrown if the server hasn't been bound in the RMI settings
 	 */
-	public PtBoolean oeEnterAnswer(String login, String answer) throws ServerOfflineException, ServerNotBoundException, NoSuchPaddingException, NoSuchAlgorithmException{
+	public PtBoolean oeEnterAnswer(String login, String answer) throws ServerOfflineException, ServerNotBoundException, NoSuchPaddingException, NoSuchAlgorithmException, IOException{
 		DtLogin aDtLogin = new DtLogin(new PtString(login));
 		DtAnswer aDtAnswer = new DtAnswer(new PtString(answer));
 		try {
