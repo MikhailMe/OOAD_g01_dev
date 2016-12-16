@@ -12,26 +12,21 @@
  ******************************************************************************/
 package lu.uni.lassy.excalibur.examples.icrash.dev.java.system;
 
+import java.io.File;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Enumeration;
 import java.util.Hashtable;
 import java.util.List;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.concurrent.Callable;
 import java.util.stream.Collectors;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
-import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.IcrashEnvironment;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.ActActivator;
@@ -61,6 +56,7 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCo
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCoordinatorID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtCrisisID;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtGPSLocation;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtKey;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPhoneNumber;
@@ -70,7 +66,6 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCr
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisType;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtHumanKind;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.secondary.DtSMS;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtByteArray;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtDate;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtDateAndTime;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtInteger;
@@ -599,8 +594,8 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 			DtLogin aLogin = new DtLogin(new PtString(adminName));
 			DtPassword aPwd = new DtPassword(new PtString("7WXC1359"));
 			ctAdmin.init(aLogin, aPwd);
-			questionForAdmin = new DtQuestion(new PtString("What name of you cat?"));
-			answerForAdmin = new DtAnswer(new PtString("murzik"));
+			questionForAdmin = new DtQuestion(new PtString("What's name of you cat?"));
+			answerForAdmin = new DtAnswer(new PtString("cat"));
 			/*
 			PostF 7 the association between ctAdministrator and actAdministrator is made of 
 			one couple made of the jointly specified instances.
@@ -1117,56 +1112,22 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 	}
 
 	
-	private static byte[] decrypt(SecretKeySpec key, byte[] crypted) throws NoSuchPaddingException, NoSuchAlgorithmException {
-        try {
-            Cipher decryptor = Cipher.getInstance("AES");
-            decryptor.init(Cipher.DECRYPT_MODE, key);
-            return decryptor.doFinal(crypted);
-        } catch (IllegalBlockSizeException | InvalidKeyException | BadPaddingException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-	
-	private static SecretKeySpec gen(String mySuperAESKey) {
-        byte[] bkey = new byte[16];
-        new Random().nextBytes(bkey);
-        SecretKeySpec key = new SecretKeySpec(mySuperAESKey.getBytes(), "AES");
-        return key;
-    }
-	
-	
-	private DtLogin getDtLogin(DtByteArray BTLogin) throws NoSuchPaddingException, NoSuchAlgorithmException{
-		String temp = "u7bNS5,w0~k8HGb-";
-        SecretKeySpec key = gen(temp);
-		byte[] decrypted = decrypt(key, BTLogin.value);
-		return new DtLogin(new PtString(new String(decrypted)));
-	}
-	
-	private DtPassword getDtPassword(DtByteArray BTPassword) throws NoSuchPaddingException, NoSuchAlgorithmException{
-		String temp = "u7bNS5,w0~k8HGb-";
-		SecretKeySpec key = gen(temp);
-		byte[] decrypted = decrypt(key, BTPassword.value);
-		return new DtPassword(new PtString(new String(decrypted)));	
-	}
-	
-	private DtAnswer getDtAnswer(DtByteArray BTAnswer) throws NoSuchPaddingException, NoSuchAlgorithmException{
-		String temp = "u7bNS5,w0~k8HGb-";
-		SecretKeySpec key = gen(temp);
-		byte[] decrypted = decrypt(key, BTAnswer.value);
-		return new DtAnswer(new PtString(new String(decrypted)));	
-	}
+
 	
 	/* (non-Javadoc)
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword)
 	 */
 	//actAuthenticated Actor
-	public PtString oeLogin(DtByteArray BTLogin, DtByteArray BTPassword)
+	public PtString oeLogin(DtLogin aDtLogin, DtPassword aDtPassword)
 			throws RemoteException {
 		try {
-			DtLogin aDtLogin = getDtLogin(BTLogin);
-			DtPassword aDtPassword = getDtPassword(BTPassword);
-			log.info("Your data was decrypted on the server");
+			Scanner in = new Scanner(new File("key.txt"));
+			DtKey key = new DtKey(new PtString(in.next()));
+			in.close();
+			aDtLogin.decrypt(key);
+			aDtPassword.decrypt(key);
+			log.info("Your data was decrypted on the server");		
+			
 			
 			log.debug("The current requesting authenticating actor is " + currentRequestingAuthenticatedActor.getLogin().value.getValue());
 			//PreP1
@@ -1231,15 +1192,18 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem#oeLogin(lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtQuestion, lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer)
 	 */
 	//actAuthenticated Actor
-	public PtBoolean oeEnterAnswer(DtByteArray BTLogin, DtByteArray BTAnswer) throws RemoteException {
+	public PtBoolean oeEnterAnswer(DtLogin aDtLogin, DtAnswer aDtAnswer) throws RemoteException {
 		try {
 			//PreP1
 			isSystemStarted();
 			
-			
-			DtLogin aDtLogin = getDtLogin(BTLogin);
-			DtAnswer aDtAnswer = getDtAnswer(BTAnswer);
+			Scanner in = new Scanner(new File("key.txt"));
+			DtKey key = new DtKey(new PtString(in.next()));
+			in.close();
+			aDtLogin.decrypt(key);
+			aDtAnswer.decrypt(key);
 			log.info("Your data was decrypted on the server");
+			
 			
 			/**
 			 * check whether the credentials corresponds to an existing user

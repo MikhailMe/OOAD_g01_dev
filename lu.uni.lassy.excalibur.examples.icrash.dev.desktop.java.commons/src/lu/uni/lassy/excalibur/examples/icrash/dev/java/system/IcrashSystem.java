@@ -42,7 +42,6 @@ import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtAl
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisStatus;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtCrisisType;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.EtHumanKind;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtByteArray;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtDate;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtDateAndTime;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtTime;
@@ -333,7 +332,7 @@ public interface IcrashSystem extends Remote {
 	 * @return The success of the method is String = question
 	 * @throws RemoteException Thrown if the server is offline
 	 */
-	public PtString oeLogin(DtByteArray BPLogin,DtByteArray BTPassword) throws RemoteException; 
+	public PtString oeLogin(DtLogin aDtLogin,DtPassword aDtPassword) throws RemoteException; 
 	
 	
 	/**
@@ -343,7 +342,7 @@ public interface IcrashSystem extends Remote {
 	 * @return The success of the method
 	 * @throws RemoteException Thrown if the server is offline
 	 */
-	public PtBoolean oeEnterAnswer(DtByteArray BPLogin,DtByteArray BTAnswer) throws RemoteException;
+	public PtBoolean oeEnterAnswer(DtLogin aDtLogin,DtAnswer aDtAnswer) throws RemoteException;
 	/**
 	 * Processes a logout for the current authenticating actor.
 	 *

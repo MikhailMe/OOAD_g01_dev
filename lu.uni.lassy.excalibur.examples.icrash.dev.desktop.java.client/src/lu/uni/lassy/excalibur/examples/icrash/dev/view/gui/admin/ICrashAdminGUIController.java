@@ -11,7 +11,7 @@
  *     Thomas Mortimer - Updated client to MVC and added new design patterns
  ******************************************************************************/
 package lu.uni.lassy.excalibur.examples.icrash.dev.view.gui.admin;
-import java.io.IOException;
+import java.io.IOException; 
 import java.net.URL;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -54,7 +54,7 @@ import javafx.scene.layout.Pane;
 
 
 /*
- * This is the end of the import section to be replaced by modifications in the ICrash.fxml document from the sample skeleton controller
+ * This is the end of the import section to be replaced by modifications in the ICrash.fxml document from the sample skeleton controller 
  */
 /**
  * The Class ICrashGUIController, which deals with handling the GUI and it's functions for the Administrator.

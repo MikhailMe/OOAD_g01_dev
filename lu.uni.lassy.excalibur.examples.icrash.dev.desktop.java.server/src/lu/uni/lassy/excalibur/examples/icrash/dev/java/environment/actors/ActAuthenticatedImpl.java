@@ -25,20 +25,14 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.crypto.BadPaddingException;
-import javax.crypto.Cipher;
-import javax.crypto.IllegalBlockSizeException;
 import javax.crypto.NoSuchPaddingException;
-import javax.crypto.spec.SecretKeySpec;
-import java.security.InvalidKeyException;
-import java.util.Random;
 import java.util.Scanner;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
+import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtKey;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtLogin;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtPassword;
-import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.DtByteArray;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtBoolean;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.types.stdlib.PtString;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.utils.Log4JUtils;
@@ -75,30 +69,7 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 
 	}
 	
-	private static SecretKeySpec gen(String mySuperAESKey) {
-        byte[] bkey = new byte[16];
-        new Random().nextBytes(bkey);
-        SecretKeySpec key = new SecretKeySpec(mySuperAESKey.getBytes(), "AES");
-        return key;
-    }
 
-    private static byte[] encrypt(SecretKeySpec key, String answer) throws NoSuchPaddingException, NoSuchAlgorithmException {
-        try {
-            Cipher encryptor = Cipher.getInstance("AES");
-            encryptor.init(Cipher.ENCRYPT_MODE, key);
-            return encryptor.doFinal(answer.getBytes());
-        } catch (IllegalBlockSizeException | InvalidKeyException | BadPaddingException e) {
-        	e.printStackTrace();
-        }
-        return null;
-    }
-	
-	/*
-	 * (non-Javadoc)
-	 * 
-	 * @see lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors.
-	 * ActAuthenticated#getName()
-	 */
 	public DtLogin getLogin() {
 		return login;
 	}
@@ -128,17 +99,16 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 
 		log.info("message ActAuthenticated.oeLogin sent to system");
 		
+		
 		Scanner in = new Scanner(new File("key.txt"));
-		SecretKeySpec key = gen(in.next());
+		DtKey key = new DtKey(new PtString(in.next()));
 		in.close();
 		log.info("Secret key obtained from a \"secret channel\"");
-		
-        DtByteArray BTlogin = new DtByteArray(encrypt(key, aDtLogin.toString()));
-        DtByteArray BTpassword = new DtByteArray(encrypt(key, aDtPassword.toString()));
+		aDtLogin.encrypt(key);
+		aDtPassword.encrypt(key);
         log.info("Your data was encrypted on the client");
         
-        
-		PtString res = iCrashSys_Server.oeLogin(BTlogin, BTpassword);
+		PtString res = iCrashSys_Server.oeLogin(aDtLogin, aDtPassword);
 		
 		if (!res.getValue().equals("false"))
 			log.info("operation oeLogin successfully executed by the system");
@@ -173,16 +143,16 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 
 		
 		Scanner in = new Scanner(new File("key.txt"));
-		SecretKeySpec key = gen(in.next());
+		DtKey key = new DtKey(new PtString(in.next()));
 		in.close();
 		log.info("Secret key obtained from a \"secret channel\"");
-        DtByteArray BTlogin = new DtByteArray(encrypt(key, aDtLogin.toString()));
-        DtByteArray BTAnswer = new DtByteArray(encrypt(key, aDtAnswer.toString()));
+		aDtLogin.encrypt(key);
+		aDtAnswer.encrypt(key);
         log.info("Your data was encrypted on the client");
 		
 		
 		log.info("message ActAuthenticated.oeEnterAnswer sent to system");
-		PtBoolean res = iCrashSys_Server.oeEnterAnswer(BTlogin, BTAnswer);
+		PtBoolean res = iCrashSys_Server.oeEnterAnswer(aDtLogin, aDtAnswer);
 
 		if (res.getValue() == true)
 			log.info("operation oeEnterAnswer successfully executed by the system");
