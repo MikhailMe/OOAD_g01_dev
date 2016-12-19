@@ -66,52 +66,54 @@ public class ICrashAdminGUIController extends AbstractAuthGUIController {
 	* When replacing, remember to reassign the correct methods to the button event methods and set the correct types for the tableviews
 	*/
 	
-	// String which contains answer for the additional question
+	/** String which contains answer for the additional question */
 	private String strAnswer;
 	
-	// Field, where we can see the additional question
+	/** Field, where we can see the additional question */
 	@FXML
 	private TextField txtFldQuestion;
 
-	// Field, where we can write answer for the additional question
+	/** Field, where we can write answer for the additional question */
 	@FXML
 	private PasswordField pssFldAnswer;
 
-	// Button which when clicked, check the response to an additional question
+	/** Button which when clicked, check the response to an additional question */
 	@FXML
 	private Button bttnLogon;
 	
+	/** This is text field for entering new question */
 	@FXML
 	private TextField txtChangeQuestion = new TextField();
 	
+	/** This is password field for entering new password */
 	@FXML
 	private PasswordField txtChangeAnswer = new PasswordField();
 	
-	// Pane, which contains txtFldQuestion, pssFldAnswer, bttnLogon
+	/** Pane, which contains txtFldQuestion, pssFldAnswer, bttnLogon */
 	@FXML
 	private BorderPane brdpnAdditionalQuestion;
 	
-	// Action for the bttnLogon
+	/** Action for the bttnLogon */
 	@FXML
     public void bttnBottomLogon_OnClick(ActionEvent event)
     		throws NoSuchPaddingException, NoSuchAlgorithmException, IOException{
     	entry();
     }
 	
-	// If we mistaken in the answer for the additional question we can see error in the log
+	/** If we mistaken in the answer for the additional question we can see error in the log */
 	private void mistakeQA(){
 		pssFldAnswer.setText("");
 		Log4JUtils.getInstance().getLogger().error("ENTER ANSWER ERROR");
 	}
 	
-	// If we mistaken in the login or password we can see error in the log
+	/** If we mistaken in the login or password we can see error in the log */
 	private void mistakeLP(){
 		txtfldAdminUserName.setText("");
 		psswrdfldAdminPassword.setText("");
 		Log4JUtils.getInstance().getLogger().error("ENTER LOGIN OR PASSWORD ERROR");
 	}
 	
-	// This method is called when you click on the button bttnLogon
+	/** This method is called when you click on the button bttnLogon */
 	private void entry() throws NoSuchPaddingException, NoSuchAlgorithmException, IOException{
 		try {
 			strAnswer = pssFldAnswer.getText();

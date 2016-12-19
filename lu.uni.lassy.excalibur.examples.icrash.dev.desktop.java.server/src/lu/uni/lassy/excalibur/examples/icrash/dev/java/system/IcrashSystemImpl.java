@@ -88,8 +88,11 @@ public class IcrashSystemImpl extends UnicastRemoteObject implements
 		IcrashSystem {
 	
 	
-	// HARDCODE QUESTION AND ANSWER :(
+	/** HARDCODE QUESTION AND ANSWER :( */
+
+	/** This field for additional for admin */
 	private DtQuestion questionForAdmin;
+	/** This field for answer on the additional question */
 	private DtAnswer answerForAdmin;
 
 	/** The Constant serialVersionUID. */

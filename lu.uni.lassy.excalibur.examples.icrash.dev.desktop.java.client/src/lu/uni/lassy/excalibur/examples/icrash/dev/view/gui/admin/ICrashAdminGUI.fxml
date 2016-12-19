@@ -89,7 +89,7 @@
 	                              <PasswordField fx:id="pssFldAnswer" prefHeight="25.0" prefWidth="250.0"
 	                               promptText="here you can write your answer" GridPane.columnIndex="1" GridPane.rowIndex="3" />
 	                              <Button fx:id="bttnLogon" defaultButton="true" mnemonicParsing="false" prefWidth="100.0"
-	                               onAction="#bttnBottomLogon_OnClick" text="Send a answer" GridPane.columnIndex="1" GridPane.rowIndex="4">
+	                               onAction="#bttnBottomLogon_OnClick" text="Send an answer" GridPane.columnIndex="1" GridPane.rowIndex="4">
 	                                 <font>
 	                                    <Font name="System Bold" size="12.0" />
 	                                 </font>

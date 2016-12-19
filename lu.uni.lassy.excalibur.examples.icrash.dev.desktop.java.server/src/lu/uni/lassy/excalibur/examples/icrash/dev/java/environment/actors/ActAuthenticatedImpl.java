@@ -14,7 +14,9 @@
 package lu.uni.lassy.excalibur.examples.icrash.dev.java.environment.actors;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
@@ -24,9 +26,9 @@ import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Random;
 
 import javax.crypto.NoSuchPaddingException;
-import java.util.Scanner;
 
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.IcrashSystem;
 import lu.uni.lassy.excalibur.examples.icrash.dev.java.system.types.primary.DtAnswer;
@@ -69,7 +71,8 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 
 	}
 	
-
+	
+	/** getter for the login field*/
 	public DtLogin getLogin() {
 		return login;
 	}
@@ -99,10 +102,8 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 
 		log.info("message ActAuthenticated.oeLogin sent to system");
 		
+		DtKey key = getNewKey();
 		
-		Scanner in = new Scanner(new File("key.txt"));
-		DtKey key = new DtKey(new PtString(in.next()));
-		in.close();
 		log.info("Secret key obtained from a \"secret channel\"");
 		aDtLogin.encrypt(key);
 		aDtPassword.encrypt(key);
@@ -117,6 +118,22 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 		return res;
 	}
 
+	/** this method generated new key for encryption/decryption */
+	public DtKey getNewKey() throws FileNotFoundException{
+		String dictionary = "abcdefgihjklmnopqrstuvwxyz0123456789_*][)('?!=-/.|&@#$%^";
+        String generatedKey = "";
+        Random rand = new Random();
+        for (int i = 0; i < 16; ++i) {
+            char a = dictionary.charAt(rand.nextInt(dictionary.length()));
+            generatedKey = generatedKey.concat(String.valueOf(a));
+        }
+        PrintWriter pw = new PrintWriter(new File("key.txt"));
+        pw.print(generatedKey);
+        pw.flush();
+        pw.close();
+		return new DtKey(new PtString(generatedKey));
+	}
+	
 	
 	/*
 	 * (non-Javadoc)
@@ -139,17 +156,14 @@ public abstract class ActAuthenticatedImpl extends UnicastRemoteObject implement
 		IcrashSystem iCrashSys_Server = (IcrashSystem) registry.lookup("iCrashServer");
 
 		// set up ActAuthenticated instance that performs the request
-		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);
-
+		iCrashSys_Server.setCurrentRequestingAuthenticatedActor(this);                                                                                     
 		
-		Scanner in = new Scanner(new File("key.txt"));
-		DtKey key = new DtKey(new PtString(in.next()));
-		in.close();
+		DtKey key = getNewKey();
+		
 		log.info("Secret key obtained from a \"secret channel\"");
 		aDtLogin.encrypt(key);
 		aDtAnswer.encrypt(key);
         log.info("Your data was encrypted on the client");
-		
 		
 		log.info("message ActAuthenticated.oeEnterAnswer sent to system");
 		PtBoolean res = iCrashSys_Server.oeEnterAnswer(aDtLogin, aDtAnswer);
